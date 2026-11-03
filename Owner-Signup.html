@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vetrail · Sign up</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/vetrail.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.auth{display:flex;flex-wrap:wrap;min-height:100vh;background:#fff;font-family:Inter,system-ui,sans-serif;color:#0F1B2A;font-size:14px;line-height:1.5;padding:20px;gap:20px;box-sizing:border-box}
+.art{flex:1 1 520px;min-height:560px;border-radius:28px;background:#E2F8FD;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:36px 40px;box-sizing:border-box}
+.o{position:absolute;border-radius:999px}
+.ph{position:absolute;border-radius:999px;border:6px solid #fff;object-fit:cover;box-shadow:0 12px 32px rgba(7,59,102,.18)}
+.form{flex:1 1 420px;display:flex;align-items:center;justify-content:center;padding:40px 24px;box-sizing:border-box}
+.fbox{width:100%;max-width:400px;display:flex;flex-direction:column;gap:18px}
+.steps{display:flex;gap:8px;list-style:none;margin:0;padding:0}
+.steps li{flex:1;display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:600;color:#5F6B7C}
+.steps li span{height:4px;border-radius:999px;background:#E8EBF0}
+.steps li.on{color:#0B62B5}
+.steps li.on span{background:#0B62B5}
+.pin{display:flex;gap:8px}
+.pin input{width:100%;min-width:0;height:56px;text-align:center;font:600 22px Outfit,sans-serif;padding:0}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/preact.min.js"></script>
+<script src="assets/dc-lite.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { step: 1 }; }
+  renderVals() {
+    const s = (this.state && this.state.step) || 1;
+    const go = (n) => () => this.setState({ step: n });
+    return {
+      isPin: s === 1, isConfirm: s === 2, isDetails: s === 3,
+      s1: s >= 1 ? 'on' : '', s2: s >= 2 ? 'on' : '', s3: s >= 3 ? 'on' : '',
+      toPin: go(1), toConfirm: go(2), toDetails: go(3)
+    };
+  }
+}
+DCLite.mount(Component, "\n\n<div class=\"auth\">\n<section class=\"art\" aria-label=\"Vetrail\">\n<a class=\"brand\" href=\"Owner-Login.html\" style=\"padding: 0; position: relative; z-index: 1\"><img src=\"assets/logo.png\" alt=\"\">Vetrail<\/a>\n<div aria-hidden=\"true\">\n<span class=\"o\" style=\"left: 12%; top: 22%; width: 84px; height: 84px; background: #6BE0F8\"><\/span>\n<span class=\"o\" style=\"left: 46%; top: 16%; width: 46px; height: 46px; background: #073B66\"><\/span>\n<span class=\"o\" style=\"left: 70%; top: 34%; width: 96px; height: 96px; background: #0B62B5\"><\/span>\n<span class=\"o\" style=\"left: 26%; top: 64%; width: 40px; height: 40px; background: #073B66\"><\/span>\n<span class=\"o\" style=\"left: 60%; top: 66%; width: 70px; height: 70px; background: #6BE0F8\"><\/span>\n<span class=\"o\" style=\"left: 8%; top: 52%; width: 18px; height: 18px; background: #0B62B5\"><\/span>\n<img class=\"ph\" src=\"assets/snowball.jpg\" alt=\"\" style=\"left: 30%; top: 30%; width: 170px; height: 170px\">\n<\/div>\n<div style=\"position: relative; z-index: 1; max-width: 420px\">\n<h2 style=\"font-size: 30px; line-height: 1.2; color: #073B66\">Your clinic already started the trail.<\/h2>\n<p style=\"margin-top: 10px; color: #2B4A63\">Enter the pet ID from your vet and Snowball's records show up right away.<\/p>\n<\/div>\n<\/section>\n\n<section class=\"form\" aria-labelledby=\"su-h\">\n<div class=\"fbox\">\n<ol class=\"steps\" aria-label=\"Sign-up progress\">\n<li class=\"{{s1}}\"><span><\/span>Connect pet<\/li>\n<li class=\"{{s2}}\"><span><\/span>Confirm<\/li>\n<li class=\"{{s3}}\"><span><\/span>Your details<\/li>\n<\/ol>\n\n<sc-if value=\"{{isPin}}\" hint-placeholder-val=\"{{ true }}\">\n<div style=\"display: flex; flex-direction: column; gap: 18px\">\n<div><h1 id=\"su-h\">Connect your pet<\/h1><p class=\"sub\" style=\"margin-top: 6px\">Enter the pet ID your vet gave you. It's on your visit receipt or in the clinic's email.<\/p><\/div>\n<fieldset style=\"border: 0; padding: 0; margin: 0\" class=\"fld\">\n<legend class=\"lbl\" style=\"margin-bottom: 6px\">Pet ID<\/legend>\n<div class=\"pin\">\n<input class=\"inp\" aria-label=\"Digit 1\" value=\"2\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 2\" value=\"0\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 3\" value=\"1\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 4\" value=\"7\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 5\" value=\"9\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 6\" value=\"4\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 7\" value=\"3\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 8\" value=\"2\" maxlength=\"1\">\n<input class=\"inp\" aria-label=\"Digit 9\" value=\"5\" maxlength=\"1\">\n<\/div>\n<\/fieldset>\n<button class=\"btn pri full\" type=\"button\" style=\"min-height: 48px\" onClick=\"{{toConfirm}}\">Find my pet<\/button>\n<p class=\"sm sub\" style=\"text-align: center\">Already have an account? <a href=\"Owner-Login.html\" style=\"font-weight: 600\">Log in<\/a><\/p>\n<\/div>\n<\/sc-if>\n\n<sc-if value=\"{{isConfirm}}\" hint-placeholder-val=\"{{ false }}\">\n<div style=\"display: flex; flex-direction: column; gap: 18px\">\n<span class=\"ic ok\" style=\"width: 52px; height: 52px; border-radius: 16px\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" style=\"width: 26px; height: 26px\"><path d=\"M20 6 9 17l-5-5\"><\/path><\/svg><\/span>\n<div><h1>We found Snowball<\/h1><p class=\"sub\" style=\"margin-top: 6px\">Snowball has been connected. Check this is your pet before you continue.<\/p><\/div>\n<div class=\"row\" style=\"border: 1px solid #E8EBF0; border-radius: 18px; padding: 14px\">\n<img src=\"assets/snowball.jpg\" alt=\"\" style=\"width: 64px; height: 64px; border-radius: 14px; object-fit: cover\">\n<div style=\"flex: 1\"><h3 style=\"font-size: 17px\">Snowball<\/h3><p class=\"sm muted\">Husky / Labrador · 6 months · Male<\/p><p class=\"xs muted\">Los Angeles Vet Clinic<\/p><\/div>\n<\/div>\n<div class=\"row\" style=\"gap: 10px\"><button class=\"btn sec\" type=\"button\" onClick=\"{{toPin}}\">Not my pet<\/button><button class=\"btn pri\" type=\"button\" style=\"flex: 1\" onClick=\"{{toDetails}}\">Yes, continue<\/button><\/div>\n<\/div>\n<\/sc-if>\n\n<sc-if value=\"{{isDetails}}\" hint-placeholder-val=\"{{ false }}\">\n<div style=\"display: flex; flex-direction: column; gap: 16px\">\n<div><h1>Create your account<\/h1><p class=\"sub\" style=\"margin-top: 6px\">Almost done. This is how your clinic will reach you.<\/p><\/div>\n<div class=\"two\">\n<div class=\"fld\"><label for=\"fn\">First name<\/label><input class=\"inp\" id=\"fn\" value=\"Jane\" autocomplete=\"given-name\"><\/div>\n<div class=\"fld\"><label for=\"ln\">Last name<\/label><input class=\"inp\" id=\"ln\" value=\"Doe\" autocomplete=\"family-name\"><\/div>\n<\/div>\n<div class=\"fld\"><label for=\"em2\">Email<\/label><input class=\"inp\" id=\"em2\" type=\"email\" placeholder=\"you@example.com\" autocomplete=\"email\"><\/div>\n<div class=\"two\">\n<div class=\"fld\"><label for=\"bd\">Birthday<\/label><input class=\"inp\" id=\"bd\" type=\"text\" placeholder=\"MM / DD / YYYY\"><\/div>\n<div class=\"fld\"><label for=\"gd\">Gender<\/label><select class=\"inp\" id=\"gd\"><option>Select<\/option><option>Female<\/option><option>Male<\/option><option>Non-binary<\/option><option>Prefer not to say<\/option><\/select><\/div>\n<\/div>\n<div class=\"fld\"><label for=\"pw2\">Password<\/label><input class=\"inp\" id=\"pw2\" type=\"password\" placeholder=\"At least 8 characters\" autocomplete=\"new-password\"><\/div>\n<div class=\"row\" style=\"gap: 10px\"><button class=\"btn sec\" type=\"button\" onClick=\"{{toConfirm}}\">Back<\/button><a class=\"btn pri\" href=\"Owner-ChoosePet.html\" style=\"flex: 1\">Create account<\/a><\/div>\n<\/div>\n<\/sc-if>\n<\/div>\n<\/section>\n<\/div>\n");
+</script>
+</body>
+</html>

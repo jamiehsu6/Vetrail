@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vetrail · Log in</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/vetrail.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.auth{display:flex;flex-wrap:wrap;min-height:100vh;background:#fff;font-family:Inter,system-ui,sans-serif;color:#0F1B2A;font-size:14px;line-height:1.5;padding:20px;gap:20px;box-sizing:border-box}
+.art{flex:1 1 520px;min-height:560px;border-radius:28px;background:#E2F8FD;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:36px 40px;box-sizing:border-box}
+.o{position:absolute;border-radius:999px}
+.ph{position:absolute;border-radius:999px;border:6px solid #fff;object-fit:cover;box-shadow:0 12px 32px rgba(7,59,102,.18)}
+.form{flex:1 1 420px;display:flex;align-items:center;justify-content:center;padding:40px 24px;box-sizing:border-box}
+.fbox{width:100%;max-width:380px;display:flex;flex-direction:column;gap:18px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/preact.min.js"></script>
+<script src="assets/dc-lite.js"></script>
+<script>
+class Component extends DCLogic {
+  renderVals() { return { submit: (e) => { if (e && e.preventDefault) e.preventDefault(); } }; }
+}
+DCLite.mount(Component, "\n\n<div class=\"auth\">\n<section class=\"art\" aria-label=\"Vetrail\">\n<a class=\"brand\" href=\"Owner-Login.html\" style=\"padding: 0; position: relative; z-index: 1\"><img src=\"assets/logo.png\" alt=\"\">Vetrail<\/a>\n<div aria-hidden=\"true\">\n<span class=\"o\" style=\"left: 12%; top: 22%; width: 84px; height: 84px; background: #6BE0F8\"><\/span>\n<span class=\"o\" style=\"left: 46%; top: 16%; width: 46px; height: 46px; background: #073B66\"><\/span>\n<span class=\"o\" style=\"left: 70%; top: 34%; width: 96px; height: 96px; background: #0B62B5\"><\/span>\n<span class=\"o\" style=\"left: 26%; top: 64%; width: 40px; height: 40px; background: #073B66\"><\/span>\n<span class=\"o\" style=\"left: 60%; top: 66%; width: 70px; height: 70px; background: #6BE0F8\"><\/span>\n<span class=\"o\" style=\"left: 84%; top: 18%; width: 16px; height: 16px; background: #0B62B5\"><\/span>\n<span class=\"o\" style=\"left: 8%; top: 52%; width: 18px; height: 18px; background: #0B62B5\"><\/span>\n<span class=\"o\" style=\"left: 52%; top: 50%; width: 12px; height: 12px; background: #073B66\"><\/span>\n<img class=\"ph\" src=\"assets/snowball.jpg\" alt=\"\" style=\"left: 30%; top: 30%; width: 170px; height: 170px\">\n<span class=\"o\" style=\"left: 66%; top: 52%; width: 112px; height: 112px; background: #FFE6CC; border: 6px solid #fff; display: flex; align-items: center; justify-content: center; font: 600 34px Outfit, sans-serif; color: #7A3E00; box-shadow: 0 12px 32px rgba(7,59,102,.18); box-sizing: border-box\">C<\/span>\n<\/div>\n<div style=\"position: relative; z-index: 1; max-width: 420px\">\n<h2 style=\"font-size: 30px; line-height: 1.2; color: #073B66\">Every visit, result and message, on one trail.<\/h2>\n<p style=\"margin-top: 10px; color: #2B4A63\">Your clinic shares records here, so you always know what's next for your pet.<\/p>\n<\/div>\n<\/section>\n\n<section class=\"form\" aria-labelledby=\"login-h\">\n<form class=\"fbox\" onSubmit=\"{{submit}}\">\n<div><h1 id=\"login-h\">Welcome back<\/h1><p class=\"sub\" style=\"margin-top: 6px\">Log in to see your pets' care.<\/p><\/div>\n<div class=\"fld\"><label for=\"em\">Email<\/label><input class=\"inp\" id=\"em\" type=\"email\" placeholder=\"you@example.com\" autocomplete=\"email\"><\/div>\n<div class=\"fld\"><div class=\"row\" style=\"justify-content: space-between\"><label for=\"pw\">Password<\/label><a href=\"#\" class=\"sm\" style=\"font-weight: 600; text-decoration: none\">Forgot password?<\/a><\/div><input class=\"inp\" id=\"pw\" type=\"password\" placeholder=\"Your password\" autocomplete=\"current-password\"><\/div>\n<a class=\"btn pri full\" href=\"Owner-ChoosePet.html\" style=\"min-height: 48px; margin-top: 4px\">Log in<\/a>\n<div class=\"row\" style=\"gap: 12px; color: #5F6B7C\"><span style=\"flex: 1; height: 1px; background: #E8EBF0\"><\/span><span class=\"xs\">or<\/span><span style=\"flex: 1; height: 1px; background: #E8EBF0\"><\/span><\/div>\n<a class=\"btn sec full\" href=\"Clinic-Clients.html\" style=\"min-height: 48px\">Log in as clinic staff<\/a>\n<p class=\"sm sub\" style=\"text-align: center\">New to Vetrail? <a href=\"Owner-Signup.html\" style=\"font-weight: 600\">Sign up<\/a><\/p>\n<\/form>\n<\/section>\n<\/div>\n");
+</script>
+</body>
+</html>

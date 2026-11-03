@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vetrail clinic · Calendar</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/vetrail.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.clinic{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:10px;border-radius:16px;background:#F3F5F8}
+.cal{display:grid;grid-template-columns:64px repeat(5,minmax(120px,1fr));grid-template-rows:56px repeat(20,40px);min-width:760px;position:relative}
+.dh{display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid #E8EBF0;font-size:12px;color:#5F6B7C}
+.dh b{font:600 18px Outfit,sans-serif;color:#0F1B2A}
+.dh.today b{background:#0B62B5;color:#fff;border-radius:999px;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.dh.today{color:#0B62B5;font-weight:600}
+.tm{font-size:11px;color:#5F6B7C;text-align:right;padding-right:10px;transform:translateY(-7px)}
+.ln{border-top:1px solid #EEF1F4;grid-column:2 / -1}
+.ev{margin:2px 4px;border-radius:10px;padding:4px 8px;font-size:11.5px;line-height:1.3;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;border:1px solid transparent;text-align:left;font-family:inherit;cursor:pointer;z-index:1}
+.ev b{font-weight:600}
+.ev.un{border:1.5px dashed currentColor}
+.brk{margin:2px 4px;border-radius:10px;background:repeating-linear-gradient(135deg,#F3F5F8 0 6px,#ECEFF3 6px 12px);font-size:11px;color:#5F6B7C;display:flex;align-items:center;justify-content:center;z-index:1}
+.lg{display:flex;flex-wrap:wrap;gap:8px 16px}
+.lg span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#3F4A5A}
+.lg i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.ty{display:grid;grid-template-columns:16px minmax(0,1fr) 150px;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #EEF1F4}
+.ty:last-child{border-bottom:0}
+.wh{display:grid;grid-template-columns:120px 60px minmax(0,1fr);gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #EEF1F4}
+.wh:last-child{border-bottom:0}
+.sw{width:44px;height:26px;border-radius:999px;border:0;background:#C6CED8;position:relative;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:#fff;transition:left .15s}
+.sw.on{background:#0B62B5}
+.sw.on::after{left:21px}
+.hrs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hrs .inp{min-height:40px;width:120px;font-size:14px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/preact.min.js"></script>
+<script src="assets/dc-lite.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'sch', wd: { Sun: false, Mon: true, Tue: true, Wed: true, Thu: true, Fri: true, Sat: false } }; }
+  renderVals() {
+    const s = this.state || {};
+    const tab = s.tab || 'sch';
+    const C = {
+      vax: ['Vaccination', '#FCE3F2', '#8A1F63', '15 min'],
+      prev: ['Preventative', '#CFEFFD', '#0A4F78', '30 min'],
+      chk: ['Check-up', '#FFE6CC', '#7A3E00', '30 min'],
+      well: ['Routine wellness', '#DCF3E4', '#12663D', '30 min'],
+      ill: ['Illness / injury', '#E6E0FF', '#4B2FA8', '45 min'],
+      surg: ['Surgery consult', '#FFDCD5', '#9B2C1A', '60 min'],
+      oth: ['Other', '#F1F3F6', '#4A5565', '30 min']
+    };
+    const E = [
+      [1, 8, 0.5, 'Luna', 'Shah', 'vax'], [1, 9, 0.5, 'Rocky', 'Lopez', 'prev'], [1, 10, 1, 'Pepper', 'Okafor', 'chk'],
+      [1, 11, 0.5, 'Bear', 'Reed', 'well'], [1, 11.5, 0.5, 'Nori', 'Chen', 'ill'], [1, 13, 1, 'Biscuit', 'Ruiz', 'surg'],
+      [1, 14.5, 0.5, 'Milo', 'Shah', 'chk'], [1, 15.5, 0.5, 'Coco', 'Park', 'vax', 1], [1, 16.5, 0.5, 'Max', 'Baker', 'well'],
+      [2, 8, 0.5, 'Ziggy', 'Nguyen', 'ill'], [2, 9.5, 1, 'Daisy', 'Grant', 'chk'], [2, 11, 0.5, 'Rocky', 'Lopez', 'prev'],
+      [2, 13.5, 0.5, 'Leo', 'Ward', 'well'], [2, 16, 1, 'Pixel', 'Kim', 'vax'],
+      [3, 8, 0.5, 'Apollo', 'Diaz', 'surg'], [3, 9, 0.5, 'Hazel', 'Fox', 'prev'], [3, 10, 1, 'Olive', 'Moss', 'vax'],
+      [3, 13, 1, 'Ruby', 'Hart', 'chk'], [3, 14, 0.5, 'Toby', 'Lane', 'well', 1],
+      [4, 8, 0.5, 'Juno', 'Cole', 'vax'], [4, 10, 0.5, 'Finn', 'Webb', 'prev'], [4, 11, 1, 'Mochi', 'Tran', 'chk'],
+      [4, 13, 1, 'Sadie', 'Ross', 'chk'], [4, 14, 0.5, 'Otis', 'Bell', 'surg'], [4, 16.5, 0.5, 'Remy', 'Shaw', 'ill', 1],
+      [5, 8, 0.5, 'Kiwi', 'Park', 'well'], [5, 9, 0.5, 'Bruno', 'Silva', 'prev'], [5, 9.5, 1, 'Maple', 'Young', 'chk'],
+      [5, 11, 0.5, 'Gus', 'Price', 'surg'], [5, 11.5, 0.5, 'Pip', 'Ali', 'ill'], [5, 13, 1, 'Zoe', 'Hill', 'vax', 1], [5, 14.5, 0.5, 'Ace', 'King', 'well']
+    ];
+    const fmt = (h) => { const hh = Math.floor(h), m = h % 1 ? '30' : '00'; const ap = hh >= 12 ? 'PM' : 'AM'; return ((hh + 11) % 12 + 1) + ':' + m + ' ' + ap; };
+    const D = [['Mon', 24, true], ['Tue', 25], ['Wed', 26], ['Thu', 27], ['Fri', 28]];
+    const hours = [];
+    for (let h = 8; h < 18; h++) hours.push({ row: (h - 8) * 2 + 2, label: ((h + 11) % 12 + 1) + (h >= 12 ? ' PM' : ' AM') });
+    const wd = s.wd || {};
+    const isSch = tab === 'sch';
+    return {
+      isSch, isMan: !isSch,
+      tabSch: isSch ? 'tab on' : 'tab', tabMan: isSch ? 'tab' : 'tab on',
+      selSch: isSch ? 'true' : 'false', selMan: isSch ? 'false' : 'true',
+      goSch: () => this.setState({ tab: 'sch' }), goMan: () => this.setState({ tab: 'man' }),
+      days: D.map((d, i) => ({ dow: d[0], n: d[1], col: i + 2, cls: d[2] ? 'dh today' : 'dh' })),
+      hours,
+      breaks: D.map((d, i) => ({ col: i + 2 })),
+      events: E.map((e) => {
+        const c = C[e[5]];
+        return {
+          col: e[0] + 1, row: ((e[1] - 8) * 2 + 2) + ' / span ' + (e[2] * 2),
+          pet: e[3], owner: e[4], type: c[0], bg: c[1], fg: c[2], cls: e[6] ? 'ev un' : 'ev',
+          aria: e[3] + ', ' + c[0] + ', ' + D[e[0] - 1][0] + ' ' + fmt(e[1]) + (e[6] ? ', unconfirmed' : '')
+        };
+      }),
+      types: Object.keys(C).map((k) => ({ id: 'ty-' + k, name: C[k][0], bg: C[k][1], dur: C[k][3] })),
+      wh: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => {
+        const full = { Sun: 'Sunday', Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday' }[d];
+        const on = !!wd[d];
+        return { day: full, on: on ? 'true' : 'false', open: on, closed: !on, cls: on ? 'sw on' : 'sw', fromId: 'f-' + d, toId: 't-' + d, flip: () => this.setState({ wd: { ...wd, [d]: !on } }) };
+      })
+    };
+  }
+}
+DCLite.mount(Component, "\n\n<div class=\"app\">\n<nav class=\"side\" aria-label=\"Clinic navigation\">\n<a class=\"brand\" href=\"Clinic-Clients.html\"><img src=\"assets/logo.png\" alt=\"\">Vetrail<\/a>\n<div class=\"clinic\"><span class=\"ic\" style=\"background: #073B66; color: #fff; font: 600 13px Outfit, sans-serif\">LA<\/span><div style=\"min-width: 0\"><p class=\"b\">Los Angeles Vet Clinic<\/p><p class=\"xs muted\">Clinic portal<\/p><\/div><\/div>\n<a class=\"nav\" href=\"Clinic-Clients.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"><\/circle><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a5.5 5.5 0 0 1 3.5 6\"><\/path><\/svg>Clients<\/a>\n<a class=\"nav on\" href=\"Clinic-Calendar.html\" aria-current=\"page\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"><\/rect><path d=\"M3 10h18M8 3v4M16 3v4\"><\/path><\/svg>Calendar<\/a>\n<a class=\"nav\" href=\"Clinic-Messages.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z\"><\/path><\/svg>Messages<span class=\"cnt\">3<\/span><\/a>\n<a class=\"nav\" href=\"Clinic-Upload.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 15V3M7 8l5-5 5 5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2\"><\/path><\/svg>Upload results<\/a>\n<div class=\"grow\"><\/div>\n<a class=\"nav\" href=\"#\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 7h10M18 7h2M4 17h4M12 17h8\"><\/path><circle cx=\"16\" cy=\"7\" r=\"2\"><\/circle><circle cx=\"10\" cy=\"17\" r=\"2\"><\/circle><\/svg>Settings<\/a>\n<a class=\"nav\" href=\"Owner-Login.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11\"><\/path><\/svg>Log out<\/a>\n<div class=\"me\"><span class=\"av\">SD<\/span><div><p class=\"b\">Dr. Sarah Davis<\/p><p class=\"xs muted\">Veterinarian<\/p><\/div><\/div>\n<\/nav>\n\n<main class=\"main\">\n<div class=\"top\">\n<div><h1>Calendar<\/h1><p class=\"sub\" style=\"margin-top: 4px\">Owners book into the open times you set here.<\/p><\/div>\n<div class=\"tabs\" role=\"tablist\" aria-label=\"Calendar view\">\n<button class=\"{{tabSch}}\" type=\"button\" role=\"tab\" aria-selected=\"{{selSch}}\" onClick=\"{{goSch}}\"><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"><\/rect><path d=\"M3 10h18M8 3v4M16 3v4\"><\/path><\/svg>My schedule<\/button>\n<button class=\"{{tabMan}}\" type=\"button\" role=\"tab\" aria-selected=\"{{selMan}}\" onClick=\"{{goMan}}\"><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 7h10M18 7h2M4 17h4M12 17h8\"><\/path><circle cx=\"16\" cy=\"7\" r=\"2\"><\/circle><circle cx=\"10\" cy=\"17\" r=\"2\"><\/circle><\/svg>Manage availability<\/button>\n<\/div>\n<\/div>\n\n<sc-if value=\"{{isSch}}\" hint-placeholder-val=\"{{ true }}\">\n<section class=\"card\" style=\"padding: 0\" aria-labelledby=\"wk-h\">\n<div class=\"top\" style=\"padding: 18px 24px; border-bottom: 1px solid #E8EBF0\">\n<div class=\"row\"><button class=\"icob\" type=\"button\" aria-label=\"Previous week\"><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m15 6-6 6 6 6\"><\/path><\/svg><\/button><h2 id=\"wk-h\" style=\"min-width: 170px; text-align: center\">March 24 – 28, 2025<\/h2><button class=\"icob\" type=\"button\" aria-label=\"Next week\"><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m9 6 6 6-6 6\"><\/path><\/svg><\/button><button class=\"btn sec sm\" type=\"button\">Today<\/button><\/div>\n<div class=\"lg\" aria-label=\"Visit types\">\n<span><i style=\"background: #FCE3F2\"><\/i>Vaccination<\/span><span><i style=\"background: #CFEFFD\"><\/i>Preventative<\/span><span><i style=\"background: #FFE6CC\"><\/i>Check-up<\/span><span><i style=\"background: #DCF3E4\"><\/i>Wellness<\/span><span><i style=\"background: #E6E0FF\"><\/i>Illness / injury<\/span><span><i style=\"background: #FFDCD5\"><\/i>Surgery consult<\/span><span><i style=\"border: 1.5px dashed #5F6B7C\"><\/i>Unconfirmed<\/span>\n<\/div>\n<\/div>\n<div class=\"scroll\" style=\"padding: 0 16px 16px 0\">\n<div class=\"cal\">\n<div style=\"grid-column: 1; grid-row: 1; border-bottom: 1px solid #E8EBF0\"><\/div>\n<sc-for list=\"{{days}}\" as=\"d\" hint-placeholder-count=\"5\">\n<div class=\"{{d.cls}}\" style=\"grid-column: {{d.col}}; grid-row: 1\">{{d.dow}}<b>{{d.n}}<\/b><\/div>\n<\/sc-for>\n<sc-for list=\"{{hours}}\" as=\"h\" hint-placeholder-count=\"10\">\n<div class=\"tm\" style=\"grid-column: 1; grid-row: {{h.row}}\">{{h.label}}<\/div>\n<div class=\"ln\" style=\"grid-row: {{h.row}}\"><\/div>\n<\/sc-for>\n<sc-for list=\"{{breaks}}\" as=\"b\" hint-placeholder-count=\"5\">\n<div class=\"brk\" style=\"grid-column: {{b.col}}; grid-row: 10 / span 2\">Lunch<\/div>\n<\/sc-for>\n<sc-for list=\"{{events}}\" as=\"e\" hint-placeholder-count=\"12\">\n<button class=\"{{e.cls}}\" type=\"button\" style=\"grid-column: {{e.col}}; grid-row: {{e.row}}; background: {{e.bg}}; color: {{e.fg}}\" aria-label=\"{{e.aria}}\"><b>{{e.pet}} · {{e.owner}}<\/b><span>{{e.type}}<\/span><\/button>\n<\/sc-for>\n<\/div>\n<\/div>\n<\/section>\n<\/sc-if>\n\n<sc-if value=\"{{isMan}}\" hint-placeholder-val=\"{{ false }}\">\n<div class=\"wrap\">\n<section class=\"card\" style=\"flex: 1 1 420px\" aria-labelledby=\"ty-h\">\n<h2 id=\"ty-h\">Appointment types<\/h2>\n<p class=\"sm muted\" style=\"margin-top: 2px\">How long each visit type takes on your calendar<\/p>\n<div style=\"margin-top: 10px\">\n<sc-for list=\"{{types}}\" as=\"t\" hint-placeholder-count=\"7\">\n<div class=\"ty\"><i style=\"width: 14px; height: 14px; border-radius: 4px; background: {{t.bg}}\" aria-hidden=\"true\"><\/i><label class=\"b\" for=\"{{t.id}}\">{{t.name}}<\/label><select class=\"inp\" id=\"{{t.id}}\" style=\"min-height: 40px; font-size: 14px\"><option>{{t.dur}}<\/option><option>15 min<\/option><option>30 min<\/option><option>45 min<\/option><option>60 min<\/option><\/select><\/div>\n<\/sc-for>\n<\/div>\n<\/section>\n\n<section class=\"card\" style=\"flex: 1.2 1 480px\" aria-labelledby=\"wh-h\">\n<h2 id=\"wh-h\">Working hours<\/h2>\n<p class=\"sm muted\" style=\"margin-top: 2px\">Owners can only book inside these hours<\/p>\n<div style=\"margin-top: 10px\">\n<sc-for list=\"{{wh}}\" as=\"w\" hint-placeholder-count=\"7\">\n<div class=\"wh\">\n<span class=\"b\">{{w.day}}<\/span>\n<button class=\"{{w.cls}}\" type=\"button\" role=\"switch\" aria-checked=\"{{w.on}}\" aria-label=\"{{w.day}} working\" onClick=\"{{w.flip}}\"><\/button>\n<sc-if value=\"{{w.open}}\" hint-placeholder-val=\"{{ true }}\"><div class=\"hrs\"><label class=\"sr\" for=\"{{w.fromId}}\">From<\/label><select class=\"inp\" id=\"{{w.fromId}}\"><option>8:00 AM<\/option><option>9:00 AM<\/option><\/select><span class=\"muted\">to<\/span><label class=\"sr\" for=\"{{w.toId}}\">To<\/label><select class=\"inp\" id=\"{{w.toId}}\"><option>6:00 PM<\/option><option>5:00 PM<\/option><\/select><\/div><\/sc-if>\n<sc-if value=\"{{w.closed}}\" hint-placeholder-val=\"{{ false }}\"><span class=\"muted\">Not working<\/span><\/sc-if>\n<\/div>\n<\/sc-for>\n<\/div>\n<div style=\"margin-top: 18px; background: #F7F9FC; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px\">\n<div class=\"row\" style=\"justify-content: space-between\"><h3>Breaks<\/h3><button class=\"btn ghost sm\" type=\"button\"><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"><\/path><\/svg>Add break<\/button><\/div>\n<div class=\"row\" style=\"justify-content: space-between; background: #fff; border: 1px solid #E8EBF0; border-radius: 12px; padding: 10px 14px\"><span><b>Lunch<\/b> <span class=\"muted\">· Mon – Fri<\/span><\/span><span class=\"sub\">12:00 – 1:00 PM<\/span><\/div>\n<\/div>\n<div class=\"row\" style=\"justify-content: flex-end; margin-top: 18px; gap: 10px\"><button class=\"btn ghost\" type=\"button\" onClick=\"{{goSch}}\">Cancel<\/button><button class=\"btn pri\" type=\"button\" onClick=\"{{goSch}}\">Save changes<\/button><\/div>\n<\/section>\n<\/div>\n<\/sc-if>\n<\/main>\n<\/div>\n");
+</script>
+</body>
+</html>

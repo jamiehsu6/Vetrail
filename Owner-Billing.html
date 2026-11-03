@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vetrail · Billing</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/vetrail.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.bal{background:#073B66;border-color:#073B66;color:#fff;display:flex;flex-direction:column;gap:6px}
+.bal h2{color:#fff}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/preact.min.js"></script>
+<script src="assets/dc-lite.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'cur' }; }
+  renderVals() {
+    const tab = (this.state && this.state.tab) || 'cur';
+    const S = { pet: 'Snowball', pi: 'S', pbg: '#CFEFFD', pfg: '#0A4F78' };
+    const C = { pet: 'Cosmo', pi: 'C', pbg: '#FFE6CC', pfg: '#7A3E00' };
+    const cur = [
+      { ...S, d: '03/10/25', reason: 'Lab test (CBC + chemistry)', amt: '$200.00', st: 'Due Apr 9', pc: 'pill warn', act: 'Pay', bcls: 'btn pri sm' }
+    ];
+    const hist = [
+      { ...S, d: '02/23/25', reason: 'Annual check-up & vaccines', amt: '$250.00', st: 'Paid', pc: 'pill ok', act: 'Receipt', bcls: 'btn sec sm' },
+      { ...S, d: '01/09/25', reason: 'Emergency visit', amt: '$80.00', st: 'Paid', pc: 'pill ok', act: 'Receipt', bcls: 'btn sec sm' },
+      { ...C, d: '12/18/24', reason: 'Annual check-up', amt: '$150.00', st: 'Paid', pc: 'pill ok', act: 'Receipt', bcls: 'btn sec sm' },
+      { ...S, d: '11/02/24', reason: 'Neuter surgery', amt: '$420.00', st: 'Paid', pc: 'pill ok', act: 'Receipt', bcls: 'btn sec sm' },
+      { ...S, d: '10/15/24', reason: 'New patient exam & vaccines', amt: '$135.00', st: 'Paid', pc: 'pill ok', act: 'Receipt', bcls: 'btn sec sm' }
+    ];
+    const isCur = tab === 'cur';
+    return {
+      rows: isCur ? cur : hist,
+      tabCur: isCur ? 'tab on' : 'tab', tabHist: isCur ? 'tab' : 'tab on',
+      selCur: isCur ? 'true' : 'false', selHist: isCur ? 'false' : 'true',
+      goCur: () => this.setState({ tab: 'cur' }), goHist: () => this.setState({ tab: 'hist' })
+    };
+  }
+}
+DCLite.mount(Component, "\n\n<div class=\"app\">\n<nav class=\"side\" aria-label=\"Main navigation\">\n<a class=\"brand\" href=\"index.html\"><img src=\"assets/logo.png\" alt=\"\">Vetrail<\/a>\n<a class=\"petsw\" href=\"Owner-ChoosePet.html\" aria-label=\"Switch pet, current pet Snowball\"><img src=\"assets/snowball.jpg\" alt=\"\"><div style=\"flex: 1; min-width: 0\"><p class=\"b\">Snowball<\/p><p class=\"xs muted\">Switch pet<\/p><\/div><svg class=\"i s\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m7 9 5-5 5 5M7 15l5 5 5-5\"><\/path><\/svg><\/a>\n<a class=\"nav\" href=\"index.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"><\/path><\/svg>Home<\/a>\n<a class=\"nav\" href=\"Owner-Appointments.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"><\/rect><path d=\"M3 10h18M8 3v4M16 3v4\"><\/path><\/svg>Appointments<\/a>\n<a class=\"nav\" href=\"Owner-Messages.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z\"><\/path><\/svg>Messages<span class=\"cnt\">2<\/span><\/a>\n<a class=\"nav\" href=\"Owner-Records.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"><\/rect><path d=\"M9 4V3h6v1M9 10h6M9 14h4\"><\/path><\/svg>Health records<\/a>\n<a class=\"nav on\" href=\"Owner-Billing.html\" aria-current=\"page\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z\"><\/path><path d=\"M9 8h6M9 12h6\"><\/path><\/svg>Billing<\/a>\n<div class=\"grow\"><\/div>\n<a class=\"nav\" href=\"Owner-Settings.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 7h10M18 7h2M4 17h4M12 17h8\"><\/path><circle cx=\"16\" cy=\"7\" r=\"2\"><\/circle><circle cx=\"10\" cy=\"17\" r=\"2\"><\/circle><\/svg>Settings<\/a>\n<a class=\"nav\" href=\"Owner-Login.html\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11\"><\/path><\/svg>Log out<\/a>\n<div class=\"me\"><span class=\"av\">JD<\/span><div><p class=\"b\">Jane Doe<\/p><p class=\"xs muted\">Los Angeles Vet Clinic<\/p><\/div><\/div>\n<\/nav>\n\n<main class=\"main\">\n<div class=\"top\">\n<div><h1>Billing<\/h1><p class=\"sub\" style=\"margin-top: 4px\">Bills from Los Angeles Vet Clinic for all your pets<\/p><\/div>\n<\/div>\n\n<div class=\"wrap\" style=\"align-items: stretch\">\n<section class=\"card bal\" style=\"flex: 1 1 300px\" aria-labelledby=\"bal-h\">\n<p style=\"color: #BFD3E6\" class=\"sm\">Balance due<\/p>\n<h2 id=\"bal-h\" style=\"font-size: 36px; line-height: 1.1\">$200.00<\/h2>\n<p class=\"sm\" style=\"color: #BFD3E6\">1 open bill · due April 9, 2025<\/p>\n<div class=\"row\" style=\"margin-top: 14px; flex-wrap: wrap\"><button class=\"btn\" type=\"button\" style=\"background: #fff; color: #073B66\">Pay now<\/button><button class=\"btn\" type=\"button\" style=\"background: transparent; color: #fff; border-color: rgba(255,255,255,.35)\">Set up autopay<\/button><\/div>\n<\/section>\n<section class=\"card\" style=\"flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px\" aria-labelledby=\"pm-h\">\n<p class=\"sm muted\" id=\"pm-h\">Payment method<\/p>\n<div class=\"row\" style=\"margin-top: 4px\"><span class=\"ic neu\" style=\"width: 48px; height: 34px; border-radius: 8px\"><svg class=\"i\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"2\" y=\"5\" width=\"20\" height=\"14\" rx=\"2\"><\/rect><path d=\"M2 10h20\"><\/path><\/svg><\/span><div><p class=\"b\">Visa ending 4242<\/p><p class=\"xs muted\">Expires 08/27<\/p><\/div><\/div>\n<a class=\"lnk\" href=\"Owner-Settings.html\" style=\"margin-top: auto\">Change<\/a>\n<\/section>\n<section class=\"card\" style=\"flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px\" aria-labelledby=\"lp-h\">\n<p class=\"sm muted\" id=\"lp-h\">Last payment<\/p>\n<p class=\"num\">$250.00<\/p>\n<p class=\"xs muted\">Feb 23, 2025 · Annual check-up<\/p>\n<\/section>\n<\/div>\n\n<div class=\"tabs\" role=\"tablist\" aria-label=\"Bills\">\n<button class=\"{{tabCur}}\" type=\"button\" role=\"tab\" aria-selected=\"{{selCur}}\" onClick=\"{{goCur}}\">Current bills <span class=\"xs muted\">1<\/span><\/button>\n<button class=\"{{tabHist}}\" type=\"button\" role=\"tab\" aria-selected=\"{{selHist}}\" onClick=\"{{goHist}}\">Payment history<\/button>\n<\/div>\n\n<section class=\"card flat\" aria-label=\"Bills\">\n<div class=\"scroll\"><table class=\"tbl\">\n<thead><tr><th scope=\"col\">Date<\/th><th scope=\"col\">Pet<\/th><th scope=\"col\">Appointment reason<\/th><th scope=\"col\">Total amount<\/th><th scope=\"col\">Status<\/th><th scope=\"col\"><span class=\"sr\">Action<\/span><\/th><\/tr><\/thead>\n<tbody>\n<sc-for list=\"{{rows}}\" as=\"r\" hint-placeholder-count=\"3\">\n<tr>\n<td class=\"muted\">{{r.d}}<\/td>\n<td><div class=\"row\" style=\"gap: 8px\"><span class=\"av\" style=\"width: 28px; height: 28px; font-size: 10px; background: {{r.pbg}}; color: {{r.pfg}}\">{{r.pi}}<\/span>{{r.pet}}<\/div><\/td>\n<td class=\"b\">{{r.reason}}<\/td>\n<td class=\"b\">{{r.amt}}<\/td>\n<td><span class=\"{{r.pc}}\">{{r.st}}<\/span><\/td>\n<td style=\"text-align: right\"><button class=\"{{r.bcls}}\" type=\"button\">{{r.act}}<\/button><\/td>\n<\/tr>\n<\/sc-for>\n<\/tbody>\n<\/table><\/div>\n<\/section>\n<\/main>\n<\/div>\n");
+</script>
+</body>
+</html>
