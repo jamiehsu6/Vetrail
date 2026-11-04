@@ -123,28 +123,35 @@ html{scrollbar-gutter:stable}
 
 /* ---------- motion ---------- */
 @view-transition{navigation:auto}
-::view-transition-group(root){animation-duration:.22s}
-@keyframes vt-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+::view-transition-group(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+::view-transition-old(root){animation:vt-out .3s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-fade .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-rise{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
 @keyframes vt-fade{from{opacity:0}to{opacity:1}}
-@keyframes vt-sheet{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-:root{--ease-soft:cubic-bezier(.2,.7,.2,1)}
+@keyframes vt-sheet{from{opacity:0;transform:translate3d(0,40px,0)}to{opacity:1;transform:none}}
+/* ease-out-quint: fast start, long soft landing */
+:root{--ease-soft:cubic-bezier(.22,1,.36,1);--ease-out:cubic-bezier(.33,1,.68,1)}
 
 /* new content slides in softly: on page load and whenever a tab, step or panel appears */
-.main > *,.card,.conv,.fl,.file,.empty,.fbox > *,.pets > *,.art{animation:vt-rise .36s var(--ease-soft) both}
-.main > *:nth-child(2){animation-delay:.04s}
-.main > *:nth-child(3){animation-delay:.08s}
-.main > *:nth-child(4){animation-delay:.12s}
-.main > *:nth-child(n+5){animation-delay:.16s}
-.col > .card:nth-child(2),.pets > *:nth-child(2){animation-delay:.08s}
-.col > .card:nth-child(3),.pets > *:nth-child(3){animation-delay:.14s}
-.mw{animation:vt-sheet .32s var(--ease-soft) both}
-.toast{animation:vt-rise .3s var(--ease-soft) both}
-.bub{animation:vt-fade .3s ease-out both}
+.main > *,.card,.conv,.fl,.file,.empty,.fbox > *,.pets > *,.art{animation:vt-rise .7s var(--ease-soft) both}
+.main > *:nth-child(2){animation-delay:.06s}
+.main > *:nth-child(3){animation-delay:.12s}
+.main > *:nth-child(4){animation-delay:.18s}
+.main > *:nth-child(n+5){animation-delay:.24s}
+.col > .card:nth-child(2),.pets > *:nth-child(2),.fbox > *:nth-child(2){animation-delay:.1s}
+.col > .card:nth-child(3),.pets > *:nth-child(3),.fbox > *:nth-child(3){animation-delay:.18s}
+.fbox > *:nth-child(n+4){animation-delay:.24s}
+.mw{animation:vt-sheet .6s var(--ease-soft) both}
+.toast{animation:vt-rise .55s var(--ease-soft) both}
+.bub{animation:vt-rise .55s var(--ease-soft) both}
 
 /* soft state changes on controls */
-.btn,.nav,.tab,.icob,.petsw,.chip,.ch,.sl,.dy,.ap,.th,.opt,.secb,.sec,.pc,.add,.sw,.inp,.ev,.li,a.li,.act{transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s var(--ease-soft),opacity .2s ease}
-.btn:active,.icob:active,.tab:active,.ch:active,.sl:active,.dy:active{transform:scale(.97)}
-.steps li span,.bar span{transition:background-color .3s ease,width .45s var(--ease-soft)}
+.btn,.nav,.tab,.icob,.petsw,.chip,.ch,.sl,.dy,.ap,.th,.opt,.secb,.sec,.pc,.add,.sw,.inp,.ev,.li,a.li,.act,.sw::after{transition:background-color .35s var(--ease-out),color .35s var(--ease-out),border-color .35s var(--ease-out),box-shadow .4s var(--ease-out),transform .45s var(--ease-soft),opacity .35s var(--ease-out),left .4s var(--ease-soft)}
+.btn:active,.icob:active,.tab:active,.ch:active,.sl:active,.dy:active{transform:scale(.98);transition-duration:.12s}
+.pc:hover{transform:translateY(-4px)}
+.steps li span{transition:background-color .5s var(--ease-out)}
+.bar span{transition:width .8s var(--ease-soft)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
