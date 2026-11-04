@@ -7,6 +7,7 @@
   function dec(s) { if (s.indexOf('&') < 0) return s; decoder.innerHTML = s; return decoder.value; }
   function isWs(c) { return c === ' ' || c === '\n' || c === '\t' || c === '\r' || c === '\f'; }
 
+  var UID = 0;
   function parse(src) {
     var root = { kids: [] }, stack = [root], i = 0, n = src.length;
     while (i < n) {
@@ -36,7 +37,7 @@
           }
           if (name) attrs.push([name, dec(val)]);
         }
-        var el = { t: 'el', tag: t, attrs: attrs, kids: [] };
+        var el = { t: 'el', tag: t, attrs: attrs, kids: [], uid: ++UID };
         stack[stack.length - 1].kids.push(el);
         if (t === 'script' || t === 'style' || t === 'textarea') {
           var end = src.toLowerCase().indexOf('</' + t, j);
@@ -79,7 +80,16 @@
       if (nd.t === 'tx') { out.push(nd.v.indexOf('{{') >= 0 ? interp(nd.v, sc) : nd.v); continue; }
       var tag = nd.tag;
       if (tag === 'helmet') continue;
-      if (tag === 'sc-if') { if (holeVal(attrOf(nd, 'value'), sc)) out.push.apply(out, build(nd.kids, sc, svg)); continue; }
+      if (tag === 'sc-if') {
+        if (holeVal(attrOf(nd, 'value'), sc)) {
+          // key each branch so switching tabs/steps mounts fresh nodes (lets the slide-in animation play)
+          var path = sc.map(function (f) { return f.$index; }).filter(function (v) { return v !== undefined; }).join('.');
+          var ks = build(nd.kids, sc, svg);
+          for (var q = 0; q < ks.length; q++) { if (ks[q] && typeof ks[q] === 'object') ks[q].key = 'if' + nd.uid + '_' + path + '_' + q; }
+          out.push.apply(out, ks);
+        }
+        continue;
+      }
       if (tag === 'sc-for') {
         var list = holeVal(attrOf(nd, 'list'), sc) || [], as = attrOf(nd, 'as') || 'item';
         for (var li = 0; li < list.length; li++) { var frame = { $index: li }; frame[as] = list[li]; out.push.apply(out, build(nd.kids, sc.concat([frame]), svg)); }
