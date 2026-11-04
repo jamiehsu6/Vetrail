@@ -113,3 +113,10 @@ a.li:hover h3{color:var(--blue)}
 .num{font:600 22px/1.2 Outfit,sans-serif;color:var(--ink)}
 .drop{border:1.5px dashed var(--line2);border-radius:16px;background:#FAFBFC;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:48px 24px}
+
+/* keep the sidebar fixed in place on desktop */
+html{scrollbar-gutter:stable}
+@media (min-width:900px){
+  .app{flex-wrap:nowrap;align-items:flex-start}
+  .side{flex:0 0 248px;position:sticky;top:0;height:100vh;overflow-y:auto}
+}
