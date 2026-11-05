@@ -81,10 +81,10 @@ class Component extends DCLogic {
       ]
     };
     const statusOf = (a) => {
-      if (cancelled[a.id]) return { status: 'Cancelled', pcls: 'pill neu', picon: X, note: 'You cancelled this visit.' };
-      if (a.st === 'ok') return { status: 'Confirmed', pcls: 'pill ok', picon: CHECK, note: checked[a.id] ? 'Checked in online. Head straight to the front desk.' : 'Confirmed by the clinic. We\'ll remind you the day before.' };
-      if (a.st === 'warn') return { status: 'Awaiting clinic', pcls: 'pill warn', picon: CLOCK, note: 'Requested. The clinic usually confirms within a few hours.' };
-      return { status: 'Completed', pcls: 'pill neu', picon: CHECK, note: 'Visit completed.' };
+      if (cancelled[a.id]) return { status: 'Cancelled', pcls: 'pill neu', picon: X };
+      if (a.st === 'ok') return { status: 'Confirmed', pcls: 'pill ok', picon: CHECK };
+      if (a.st === 'warn') return { status: 'Awaiting clinic', pcls: 'pill warn', picon: CLOCK };
+      return { status: 'Completed', pcls: 'pill neu', picon: CHECK };
     };
     const isUp = tab === 'up';
     const all = A.up.concat(A.past);
