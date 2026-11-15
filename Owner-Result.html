@@ -56,7 +56,8 @@ class Component extends DCLogic {
     ];
     const flagged = R.filter((v) => v[2] > v[5] || v[2] < v[4]);
     const key = flagged.concat(R.filter((v) => v[0] === 'Creatinine' || v[0] === 'Glucose'));
-    const shown = all ? key.concat(R.filter((v) => key.indexOf(v) < 0)) : key;
+    const ordered = key.concat(R.filter((v) => key.indexOf(v) < 0));
+    const shown = all ? ordered : key;
     const vals = shown.map((v) => {
       const span = v[5] - v[4], min = v[4] - span / 2, max = v[5] + span / 2;
       const pct = Math.max(3, Math.min(97, ((v[2] - min) / (max - min)) * 100));
@@ -69,7 +70,7 @@ class Component extends DCLogic {
         aria: v[0] + ' ' + v[2] + ', usual range ' + v[4] + ' to ' + v[5]
       };
     });
-    const report = R.map((v) => {
+    const report = ordered.map((v) => {
       const h = v[2] > v[5];
       return { n: v[0].toUpperCase(), v: String(v[2]), ref: v[4] + ' – ' + v[5] + ' ' + v[3], f: h ? 'H' : '', cls: h ? 'h' : '' };
     });
